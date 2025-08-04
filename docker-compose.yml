@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  db:
+    container_name: postgres_db
+    image: postgres:13.1-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/posrgres_data:/var/lib/postgresql/data 
+    restart: unless-stopped
+  # test_db:
+  #   container_name: postgres_test_db
+  #   image: postgres:13.1-alpine
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: postgres_test
+  #   ports:
+  #     - "5433:5432"
+  #   volumes:
+  #     - ./database/postgres_test_data:/var/lib/postgresql/data 
+  #   restart: unless-stopped
