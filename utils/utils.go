@@ -29,16 +29,16 @@ func WriteJSON(w http.ResponseWriter, status int, data Envelope) error {
 	return nil
 }
 
-func ReadIDParam(r *http.Request) (int64, error) {
+func ReadIDParam(r *http.Request) (int, error) {
 	idStr := chi.URLParam(r, "id")
 	if idStr == "" {
 		return 0, fmt.Errorf("missing ID parameter")
 	}
-	id, err := strconv.ParseInt(idStr, 10, 64)
+	id, err := strconv.ParseInt(idStr, 10, 32)
 	if err != nil {
 		return 0, fmt.Errorf("invalid ID parameter: %w", err)
 	}
-	return id, nil
+	return int(id), nil
 }
 
 func MatchRegex(pattern, str string) bool {

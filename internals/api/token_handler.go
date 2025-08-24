@@ -16,7 +16,7 @@ type TokenHandler struct {
 	logger     *log.Logger
 }
 
-type CreateTokenRequest struct {
+type createTokenRequest struct {
 	Email string `json:"email"`
 	Password string `json:"password"`
 }
@@ -30,7 +30,7 @@ func NewTokenHandler(tokenStore store.TokenStore, userStore store.UserStore, log
 }
 
 func  (h *TokenHandler) HandleCreateToken(w http.ResponseWriter, r *http.Request) {
-	var req createUserRequest
+	var req createTokenRequest
 
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {

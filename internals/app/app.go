@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"go_beginner/internals/api"
+	"go_beginner/internals/middleware"
 	"go_beginner/internals/store"
 	"go_beginner/migrations"
 	"log"
@@ -17,6 +18,7 @@ type Application struct {
 	UserHandler *api.UserHandler
 	DB *sql.DB 
 	TokenHandler *api.TokenHandler
+	Middleware middleware.UserMiddleware
 }
  
 func NewApplication() (*Application , error) {
@@ -32,16 +34,18 @@ func NewApplication() (*Application , error) {
 	workoutStore := store.NewPostgresWorkoutStore(pgDB)
 	userStore := store.NewPostgresUserStore(pgDB)
 	tokenStore := store.NewPostgresTokenStore(pgDB)
+	middlewareHandler := middleware.UserMiddleware{UserStore: userStore}
 	app := &Application{
 		Logger: logger,
 		WorkoutHandler:  api.NewWorkoutHandler(workoutStore, logger),
 		UserHandler: api.NewUserHandler(userStore, logger),
 		TokenHandler: api.NewTokenHandler(tokenStore, userStore, logger),
 		DB: pgDB,
+		Middleware: middlewareHandler,
 	}
 	return app, nil
 }
-
+   
 func (a *Application) HealthCheck(w http.ResponseWriter , r *http.Request){
 	fmt.Fprintf(w, "All good!\n")
 }
