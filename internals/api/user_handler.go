@@ -51,7 +51,7 @@ type createUserRequest struct {
 	Bio      string `json:"bio"`
 }
 
-func (uh *UserHandler) HandleCreateUser(w http.ResponseWriter, r *http.Request){ 
+func (uh *UserHandler) HandleCreateUser(w http.ResponseWriter, r *http.Request) {
 	var req createUserRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -74,7 +74,7 @@ func (uh *UserHandler) HandleCreateUser(w http.ResponseWriter, r *http.Request){
 		Email: req.Email,
 		Bio:   req.Bio,
 	}
-	err = user.PasswordHash.Set(req.Password) 
+	err = user.PasswordHash.Set(req.Password)
 	if err != nil {
 		uh.logger.Printf("Error:: Setting user password: %v", err)
 		utils.WriteJSON(w, http.StatusInternalServerError, utils.Envelope{
@@ -207,7 +207,7 @@ func (uh *UserHandler) HandleGetUserByEmail(w http.ResponseWriter, r *http.Reque
 	if err != nil {
 		uh.logger.Printf("Error:: Getting user by email: %v", err)
 		utils.WriteJSON(w, http.StatusInternalServerError, utils.Envelope{
-			"error": "Failed to get user by email",
+			"error": "Failed to get user by email " + err.Error(),
 		})
 		return
 	}
